@@ -1,0 +1,39 @@
+﻿@model IEnumerable<crud_adventureworks2019.Models.Personas>
+
+<h2>Personas</h2>
+
+<p>@Html.ActionLink("Nuevo", "Create")</p>
+
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Tipo</th>
+        <th></th>
+    </tr>
+
+    @if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.BusinessEntityID</td>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.PersonType</td>
+                <td>
+                    <!--AUN NO TENGO ESTAS VISTAS, DARA ERROR SI SE INTENTA INGRESAR-->
+                    @Html.ActionLink("Editar", "Edit", new { id = item.BusinessEntityID }) |
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.BusinessEntityID })
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="5">No hay datos</td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,28 @@
+﻿@model crud_adventureworks2019.Models.Personas
+
+<h2>Nueva Persona</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+
+    <div>
+        @Html.LabelFor(m => m.PersonType)
+        @Html.TextBoxFor(m => m.PersonType)
+        @Html.ValidationMessageFor(m => m.PersonType)
+    </div>
+
+    <div>
+        @Html.LabelFor(m => m.FirstName)
+        @Html.TextBoxFor(m => m.FirstName)
+        @Html.ValidationMessageFor(m => m.FirstName)
+    </div>
+
+    <div>
+        @Html.LabelFor(m => m.LastName)
+        @Html.TextBoxFor(m => m.LastName)
+        @Html.ValidationMessageFor(m => m.LastName)
+    </div>
+
+    <input type="submit" value="Guardar" />
+}
