@@ -33,8 +33,6 @@ namespace crud_adventureworks2019.Controllers
         {
             return View();
         }
-        // IGNORAR
-
 
         #region Crear
         // AUN NO HAY VISTA

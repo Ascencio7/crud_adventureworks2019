@@ -15,7 +15,6 @@ namespace crud_adventureworks2019.Models
         string con = ConfigurationManager.ConnectionStrings["AWConnection"].ConnectionString;
 
         // YA MUESTRA LOS DATOS
-
         #region Obtener Datos
         public List<Personas> ObtenerDatos()
         {
@@ -26,7 +25,7 @@ namespace crud_adventureworks2019.Models
             using (SqlConnection cn = new SqlConnection(con))
             {
                 // Query para obtener los datos de la tabla Person.Person, con un limite de 10 datos (se pueden mas)
-                string consulta = @"SELECT TOP 10 
+                string consulta = @"SELECT TOP 20779
                             BusinessEntityID,
                             ISNULL(FirstName,'') AS FirstName,
                             ISNULL(LastName,'') AS LastName,
@@ -62,27 +61,29 @@ namespace crud_adventureworks2019.Models
         #endregion
 
 
-        // NECESITO REVISAR ESTOS METODOS, NO HAY VISTAS DE ELLOS TODAVIA, por eso habrá errores
-
-        #region Insertar
-        // Insertar personas
         public void InsertarDatos(Personas p)
         {
             using (SqlConnection cn = new SqlConnection(con))
             {
+                cn.Open();
+
+                // 1. Insertar en BusinessEntity y obtener el ID generado
+                SqlCommand cmdID = new SqlCommand("INSERT INTO Person.BusinessEntity DEFAULT VALUES; SELECT SCOPE_IDENTITY();", cn);
+                int newId = Convert.ToInt32(cmdID.ExecuteScalar());
+
+                // 2. Insertar en Person.Person usando el ID generado
                 string consulta = @"INSERT INTO Person.Person
-                                (PersonType, NameStyle, FirstName, LastName)
-                                VALUES (@type, 0, @first, @last)";
+                            (BusinessEntityID, PersonType, NameStyle, FirstName, LastName)
+                            VALUES (@id, @type, 0, @first, @last)";
                 SqlCommand cmd = new SqlCommand(consulta, cn);
+                cmd.Parameters.AddWithValue("@id", newId);
                 cmd.Parameters.AddWithValue("@type", p.PersonType);
                 cmd.Parameters.AddWithValue("@first", p.FirstName);
                 cmd.Parameters.AddWithValue("@last", p.LastName);
 
-                cn.Open();
                 cmd.ExecuteNonQuery();
             }
         }
-        #endregion
 
 
         #region Buscar ID
@@ -116,6 +117,7 @@ namespace crud_adventureworks2019.Models
         #endregion
 
 
+        // YA SE PUEDE ACTUALIZAR LOS DATOS SIN PROBLEMA
         #region Actualizar
         // Actualizar
         public void Actualizar(Personas p)
@@ -141,6 +143,9 @@ namespace crud_adventureworks2019.Models
         #endregion
 
 
+        /*
+            NO SE PODRAN BORRAR DATOS PORQUE ELLOS DEPENDEN EN OTRAS TABLAS
+        */
         #region Eliminar
         // Eliminar
         public void Eliminar(int id)
@@ -157,7 +162,6 @@ namespace crud_adventureworks2019.Models
             }
         }
         #endregion
-
 
     }
 }
